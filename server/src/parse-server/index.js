@@ -4,7 +4,7 @@ import ParseDashboard from 'parse-dashboard';
 import { run as runPokemonFixture } from '../fixtures/pokemons';
 
 export default {
-  setup(app, appName, settings, allowInsecureHTTPInParseDashboard = false) {
+  setup(app, appName, settings) {
     Parse.initialize(settings.parseServerApplicationId, 'js-key', settings.parseServerMasterKey);
     Parse.serverURL = settings.parseServerURL;
 
@@ -33,7 +33,7 @@ export default {
         }],
         iconsFolder,
         users: settings.parseServerDashboardUsers,
-      }, allowInsecureHTTPInParseDashboard)
+      }, true)
     );
 
     runPokemonFixture();
