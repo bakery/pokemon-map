@@ -1,0 +1,13 @@
+const { View, Text } = ReactNative;
+
+{{> declareComponent}} {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text>{{componentName}}</Text>
+      </View>
+    );
+  }
+}
+
+{{> mapDispatchAndPropsAndConnect }}

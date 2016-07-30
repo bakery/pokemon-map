@@ -1,0 +1,24 @@
+{
+  "name": "baker-server",
+  "version": "1.0.0",
+  "description": "React Native app powered by Baker",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "node ./build/index.js",
+    "heroku-postbuild": "npm install -g baker-scripts && baker build src build"
+  },
+  "engines": {
+    "node": ">=4.3"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "graphql": "^0.6.0",
+    "immutable": "^3.8.1",
+    "parse": "1.8.5",
+    "parse-dashboard": "^1.0.13",
+    "parse-graphql-client": "^0.2.0",
+    "parse-graphql-server": "^0.3.0",
+    "parse-server": "^2.2.11"
+  }
+}
