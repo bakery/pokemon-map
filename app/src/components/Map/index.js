@@ -147,6 +147,8 @@ export class Map extends Component {
         ref={this.grabMapRef}
         style={styles.mapStyle}
         onRegionChangeComplete={this.onRegionChangeComplete}
+        showsUserLocation
+        followsUserLocation
       >
       {markers}
       </MapView>
