@@ -1,7 +1,7 @@
 # Pokemon map - Pokemons around you
 
-![PokemonMap](https://dl.dropboxusercontent.com/u/9224326/pkmnmaps.png)
+🎈🎈🎈 Got testflight? Helps us test Pokemon Map - send an email to hi@thebakery.io and we'll add you to testers
 
-Baker helps you kickstart your React Native app development and helps you type less and do more 
+![PokemonMap](https://dl.dropboxusercontent.com/u/9224326/pkmnmaps.png)
 
 powered by [Pokecrew](https://www.pokecrew.com/) and [🍰 Baker](https://github.com/thebakeryio/baker)
