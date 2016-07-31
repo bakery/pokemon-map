@@ -13,10 +13,11 @@ import { createSelector } from 'reselect';
 import { selectMap } from './reducer';
 // XX: https://github.com/lelandrichardson/react-native-maps
 import MapView from 'react-native-maps';
+import Loader from '../Loader';
 
 import { getPokemonsInArea } from './actions';
 
-const { Dimensions } = ReactNative;
+const { Dimensions, View } = ReactNative;
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
@@ -109,49 +110,20 @@ export class Map extends Component {
         style={{ width: 40 }}
       />
     ));
-
-    [
-      {
-        latitude: this.region.latitude,
-        longitude: this.region.longitude,
-        title: 'Center',
-      },
-
-      {
-        latitude: this.region.latitude + this.region.latitudeDelta / 2,
-        longitude: this.region.longitude + this.region.longitudeDelta / 2,
-        title: 'North Easts',
-      },
-
-      {
-        latitude: this.region.latitude - this.region.latitudeDelta / 2,
-        longitude: this.region.longitude - this.region.latitudeDelta / 2,
-        title: 'South Wests',
-      },
-    ].forEach(l => {
-      markers.push(
-        <MapView.Marker
-          coordinate={{
-            latitude: l.latitude,
-            longitude: l.longitude,
-          }}
-          title={l.title}
-          description={l.title}
-        />
-      );
-    });
-
     return (
-      <MapView
-        initialRegion={this.region}
-        ref={this.grabMapRef}
-        style={styles.mapStyle}
-        onRegionChangeComplete={this.onRegionChangeComplete}
-        showsUserLocation
-        followsUserLocation
-      >
-      {markers}
-      </MapView>
+      <View style={{ flex: 1 }}>
+        <MapView
+          initialRegion={this.region}
+          ref={this.grabMapRef}
+          style={styles.mapStyle}
+          onRegionChangeComplete={this.onRegionChangeComplete}
+          showsUserLocation
+          followsUserLocation
+        >
+        {markers}
+        </MapView>
+        {map.get('loading') ? <Loader /> : null}
+      </View>
     );
   }
 }
