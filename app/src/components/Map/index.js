@@ -73,19 +73,19 @@ export class Map extends Component {
     console.log('onRegionChangeComplete',
       `center_latitude: ${region.latitude}`,
       `center_longitude: ${region.longitude}`,
-      `northeast_latitude: ${region.latitude + region.latitudeDelta}`,
-      `northeast_longitude: ${region.longitude + region.longitudeDelta}`,
-      `southwest_latitude: ${region.latitude - region.latitudeDelta}`,
-      `southwest_longitude: ${region.longitude - region.latitudeDelta}`
+      `northeast_latitude: ${region.latitude + region.latitudeDelta / 2}`,
+      `northeast_longitude: ${region.longitude + region.longitudeDelta / 2}`,
+      `southwest_latitude: ${region.latitude - region.latitudeDelta / 2}`,
+      `southwest_longitude: ${region.longitude - region.latitudeDelta / 2}`
     );
 
     dispatch(getPokemonsInArea({
       center_latitude: region.latitude,
       center_longitude: region.longitude,
-      northeast_latitude: region.latitude + region.latitudeDelta,
-      northeast_longitude: region.longitude + region.longitudeDelta,
-      southwest_latitude: region.latitude - region.latitudeDelta,
-      southwest_longitude: region.longitude - region.latitudeDelta,
+      northeast_latitude: region.latitude + region.latitudeDelta / 2,
+      northeast_longitude: region.longitude + region.longitudeDelta / 2,
+      southwest_latitude: region.latitude - region.latitudeDelta / 2,
+      southwest_longitude: region.longitude - region.latitudeDelta / 2,
     }));
   }
 
@@ -109,6 +109,37 @@ export class Map extends Component {
         style={{ width: 40 }}
       />
     ));
+
+    [
+      {
+        latitude: this.region.latitude,
+        longitude: this.region.longitude,
+        title: 'Center',
+      },
+
+      {
+        latitude: this.region.latitude + this.region.latitudeDelta / 2,
+        longitude: this.region.longitude + this.region.longitudeDelta / 2,
+        title: 'North Easts',
+      },
+
+      {
+        latitude: this.region.latitude - this.region.latitudeDelta / 2,
+        longitude: this.region.longitude - this.region.latitudeDelta / 2,
+        title: 'South Wests',
+      },
+    ].forEach(l => {
+      markers.push(
+        <MapView.Marker
+          coordinate={{
+            latitude: l.latitude,
+            longitude: l.longitude,
+          }}
+          title={l.title}
+          description={l.title}
+        />
+      );
+    });
 
     return (
       <MapView
