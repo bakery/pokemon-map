@@ -9,6 +9,7 @@ import {
 } from 'graphql';
 import request from 'request';
 import Pokemon from './Pokemon';
+import { pokemons } from '../fixtures/pokemons';
 
 const Sighting = Parse.Object.extend('Sighting');
 
@@ -34,15 +35,10 @@ const SightingType = new GraphQLObjectType({
     },
     pokemon: {
       type: Pokemon.SchemaType,
-      resolve: sighting => {
-        console.log('quering for pokemon', sighting.pokemon_id);
-        const q = new Parse.Query(Pokemon);
-        q.equalTo('pokenumber', sighting.pokemon_id);
-        return q.first().then((p) => {
-          console.log('got', p.toJSON());
-          return p;
-        });
-      },
+      resolve: sighting =>
+        new Pokemon(
+          pokemons.find(p => p.pokenumber === parseInt(sighting.pokemon_id, 10))
+        ),
     },
   }),
 });
