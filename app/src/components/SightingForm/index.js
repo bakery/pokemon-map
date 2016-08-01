@@ -89,6 +89,7 @@ class SightingForm extends Component {
         initialRegion={currentPosition}
         ref={this.grabMapRef}
         style={{ position: 'absolute', left: 0, bottom: 0, height: mapHeight, width }}
+        showsUserLocation
       >
         <MapView.Marker
           coordinate={{ latitude: currentPosition.latitude, longitude: currentPosition.longitude }}
