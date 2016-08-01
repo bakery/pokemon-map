@@ -14,9 +14,12 @@ import { selectMap } from './reducer';
 // XX: https://github.com/lelandrichardson/react-native-maps
 import MapView from 'react-native-maps';
 import Loader from '../Loader';
+import AddSightingButton from '../AddSightingButton';
 
 import { getPokemonsInArea } from './actions';
+import { actions as navigationActions } from 'react-native-navigation-redux-helpers';
 
+const { popRoute, pushRoute } = navigationActions;
 const { Dimensions, View } = ReactNative;
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -95,7 +98,7 @@ export class Map extends Component {
   }
 
   render() {
-    const { map } = this.props;
+    const { map, dispatch } = this.props;
     console.log('sightings', map.get('sightings'));
     const markers = map.get('sightings').map((s) => (
       <MapView.Marker
@@ -122,6 +125,9 @@ export class Map extends Component {
         {markers}
         </MapView>
         {map.get('loading') ? <Loader /> : null}
+        <AddSightingButton
+          onNavigate={() => dispatch(pushRoute({ key: 'addSighting' }, 'mainNavigation'))}
+        />
       </View>
     );
   }

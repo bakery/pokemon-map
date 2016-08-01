@@ -2,7 +2,7 @@ import Parse from 'parse/node';
 import {
   GraphQLID,
   GraphQLObjectType,
-  GraphQLString,
+  GraphQLInt,
   GraphQLFloat,
   GraphQLNonNull,
   GraphQLList,
@@ -13,31 +13,35 @@ import { pokemons } from '../fixtures/pokemons';
 
 const Sighting = Parse.Object.extend('Sighting');
 
+const getOrAttr = (item, key) => (
+  typeof item.get !== 'undefined' && item.get(key)
+) || item[key];
+
 const SightingType = new GraphQLObjectType({
   name: 'Sighting',
   description: 'A concise description of what Sighting is',
   fields: () => ({
     id: {
       type: GraphQLID,
-      resolve: sighting => sighting.id,
+      resolve: sighting => getOrAttr(sighting, 'id'),
     },
     latitude: {
       type: GraphQLFloat,
-      resolve: sighting => sighting.latitude,
+      resolve: sighting => getOrAttr(sighting, 'latitude'),
     },
     longitude: {
       type: GraphQLFloat,
-      resolve: sighting => sighting.longitude,
+      resolve: sighting => getOrAttr(sighting, 'longitude'),
     },
     pokemon_id: {
-      type: GraphQLID,
-      resolve: sighting => sighting.pokemon_id,
+      type: GraphQLInt,
+      resolve: sighting => getOrAttr(sighting, 'pokemon_id'),
     },
     pokemon: {
       type: Pokemon.SchemaType,
       resolve: sighting =>
         new Pokemon(
-          pokemons.find(p => p.pokenumber === parseInt(sighting.pokemon_id, 10))
+          pokemons.find(p => p.pokenumber === getOrAttr(sighting, 'pokemon_id'))
         ),
     },
   }),
@@ -86,7 +90,7 @@ Sighting.RootQuery = {
     // const query = new Query(Sighting);
     // return query.find();
 
-    const result = new Parse.Promise();
+    const pokecrewData = new Parse.Promise();
 
     request({
       url: 'https://api.pokecrew.com/api/v1/seens',
@@ -95,31 +99,46 @@ Sighting.RootQuery = {
     }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
         console.log('resolving with', body.seens);
-        result.resolve(body.seens);
+        pokecrewData.resolve(body.seens);
       } else {
-        result.reject(error);
+        pokecrewData.reject(error);
       }
     });
 
-    return result;
+    const sightingQuery = new Parse.Query(Sighting);
+    sightingQuery.lessThanOrEqualTo('latitude', args.northeast_latitude);
+    sightingQuery.greaterThan('latitude', args.southwest_latitude);
+    sightingQuery.lessThanOrEqualTo('longitude', args.northeast_longitude);
+    sightingQuery.greaterThan('longitude', args.southwest_longitude);
+
+    return Parse.Promise.when(pokecrewData, sightingQuery.find()).then((pcData, internalData) =>
+      [...pcData, ...internalData.map(d => Object.assign({}, d.toJSON(), { id: d.id }))]
+    );
   },
 };
 
 Sighting.Mutations = {
-  // addSighting: {
-  //   type: Sighting.SchemaType,
-  //   description: 'Create a new instance of Sighting',
-  //   args: {
-  //     text: { type: new GraphQLNonNull(GraphQLString) },
-  //   },
-  //   resolve: (_, { text }, { Query, user }) => {
-  //     const sighting = new Query(Sighting).create({ text });
-  //     if (user) {
-  //       sighting.setACL(new Parse.ACL(user));
-  //     }
-  //     return sighting.save().then(td => td);
-  //   },
-  // },
+  addSighting: {
+    type: Sighting.SchemaType,
+    description: 'Create a new instance of Sighting',
+    args: {
+      latitude: {
+        type: new GraphQLNonNull(GraphQLFloat),
+      },
+      longitude: {
+        type: new GraphQLNonNull(GraphQLFloat),
+      },
+      pokemon_id: {
+        type: new GraphQLNonNull(GraphQLInt),
+      },
+    },
+    resolve: (_, { latitude, longitude, pokemon_id }) => {
+      const sighting = new Sighting({
+        latitude, longitude, pokemon_id,
+      });
+      return sighting.save().then(s => s);
+    },
+  },
   // deleteSighting: {
   //   type: Sighting.SchemaType,
   //   description: 'Delete an instance of Sighting',

@@ -26,7 +26,7 @@ function runQuery(area) {
         southwest_longitude: ${area.southwest_longitude}
       ) {
         id, latitude, longitude, pokemon {
-          name, marker_url
+          name, marker_url, pokenumber
         }
       }
     }
