@@ -35,10 +35,11 @@ export class AddSighting extends Component {
   }
 
   onSubmit() {
-    const { dispatch } = this.props;
+    const { dispatch, onDismiss } = this.props;
     const { selectedLocation, selectedPokemon } = this.form.getFormData();
     console.log('form data', this.form.getFormData());
     dispatch(addSighting(selectedLocation, selectedPokemon));
+    onDismiss();
   }
 
   render() {
