@@ -16,8 +16,8 @@ class Pokemon extends Component {
     return (
       <View style={styles.container}>
         <Image
-          source={{ uri: image }}
-          style={{ height: 40, width: 40 }}
+          source={image}
+          style={{ height: 50, width: 50 }}
         />
         <Text>{name} - #{number}</Text>
       </View>
@@ -26,9 +26,9 @@ class Pokemon extends Component {
 }
 
 Pokemon.propTypes = {
-  image: React.PropTypes.string.isRequired,
+  image: React.PropTypes.number.isRequired,
   name: React.PropTypes.string.isRequired,
-  number: React.PropTypes.string.isRequired,
+  number: React.PropTypes.number.isRequired,
 };
 
 export default Pokemon;

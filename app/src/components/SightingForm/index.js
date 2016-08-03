@@ -84,11 +84,12 @@ class SightingForm extends Component {
     const currentPosition = this.state && this.state.currentPosition;
     const selectedPokemon = this.state && this.state.selectedPokemon;
 
+    // position: 'absolute', left: 0, bottom: 0, height: mapHeight, width
     const mapComponent = currentPosition ? (
       <MapView
         initialRegion={currentPosition}
         ref={this.grabMapRef}
-        style={{ position: 'absolute', left: 0, bottom: 0, height: mapHeight, width }}
+        style={{ flex: 2 }}
         showsUserLocation
       >
         <MapView.Marker

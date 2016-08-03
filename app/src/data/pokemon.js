@@ -157,3 +157,6 @@ export function getPokemonById(id) {
   return pokemon.find(p => p.number === id);
 }
 
+export function getAllPokemon() {
+  return pokemon;
+}
