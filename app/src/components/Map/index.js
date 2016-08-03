@@ -41,21 +41,29 @@ export class Map extends Component {
   }
 
   componentDidMount() {
+    const reportCurrentLocation = (latitude, longitude) => {
+      this.map.animateToRegion({
+        latitude,
+        longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      });
+    };
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const initialPosition = JSON.stringify(position);
-        console.log('position is', position);
-        this.setState({
-          initialPosition,
-        });
-        this.map.animateToRegion({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        });
+        reportCurrentLocation(
+          position.coords.latitude,
+          position.coords.longitude
+        );
       },
-      (error) => alert(error.message),
+      (error) => {
+        if (typeof __DEV__ !== 'undefined') {
+          reportCurrentLocation(37.78825, -122.4324);
+        } else {
+          alert(error.message);
+        }
+      },
       {
         enableHighAccuracy: true,
         timeout: 20000,
