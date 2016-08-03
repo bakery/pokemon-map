@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    borderWidth: StyleSheet.hairlineWidth,
+    flex: 1
   },
 });
