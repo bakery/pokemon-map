@@ -13,6 +13,7 @@
     "parse-graphql-client": "^0.2.0",
     "react": "^15.2.1",
     "react-native": "^0.30.0",
+    "react-native-code-push": "^1.13.6-beta",
     "react-native-maps": "git+https://github.com/lelandrichardson/react-native-maps.git",
     "react-native-navigation-redux-helpers": "^0.3.0",
     "react-redux": "^4.4.5",
