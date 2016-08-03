@@ -8,6 +8,7 @@ import ReactNative from 'react-native';
 import React, { Component } from 'react';
 import styles from './styles';
 import PokemonList from '../PokemonList';
+import Pokemon from '../Pokemon';
 
 const { View, Text } = ReactNative;
 
@@ -31,7 +32,11 @@ class PokemonSelector extends Component {
     if (selectedPokemon) {
       return (
         <View style={styles.container}>
-          <Text>{selectedPokemon.name}</Text>
+          <Pokemon
+            image={selectedPokemon.image}
+            name={selectedPokemon.name}
+            number={selectedPokemon.number}
+          />
         </View>
       );
     }
