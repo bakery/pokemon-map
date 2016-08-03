@@ -19,6 +19,7 @@ class PokemonList extends Component {
     const dataSource = ds.cloneWithRows(getAllPokemon());
     return (
       <ListView
+        initialListSize={4}
         style={styles.container}
         horizontal
         dataSource={dataSource}
