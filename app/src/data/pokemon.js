@@ -1,5 +1,5 @@
 /* eslint max-len: "off", global-require: "off" */
-export default [
+const pokemon = [
   { number: 1, attack: 44, defense: 52, stamina: 18, combined: 114, image: require('./images/1.png'), name: 'Bulbasaur', height: 0.7, weight: 6.9, categories: ['grass', 'poison'] },
   { number: 2, attack: 55, defense: 65, stamina: 24, combined: 144, image: require('./images/2.png'), name: 'Ivysaur', height: 1, weight: 13, categories: ['grass', 'poison'] },
   { number: 3, attack: 70, defense: 83, stamina: 32, combined: 184, image: require('./images/3.png'), name: 'Venusaur', height: 2, weight: 100, categories: ['grass', 'poison'] },
@@ -152,3 +152,8 @@ export default [
   { number: 150, attack: 100, defense: 83, stamina: 42, combined: 226, image: require('./images/150.png'), name: 'Mewtwo', height: 2, weight: 122, categories: ['psychic'] },
   { number: 151, attack: 77, defense: 91, stamina: 40, combined: 208, image: require('./images/151.png'), name: 'Mew', height: 0.4, weight: 4, categories: ['psychic'] },
 ];
+
+export function getPokemonById(id) {
+  return pokemon.find(p => p.number === id);
+}
+

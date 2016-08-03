@@ -15,6 +15,7 @@ import { selectMap } from './reducer';
 import MapView from 'react-native-maps';
 import Loader from '../Loader';
 import AddSightingButton from '../AddSightingButton';
+import PokemonMapMarker from '../PokemonMapMarker';
 
 import { getPokemonsInArea } from './actions';
 import { actions as navigationActions } from 'react-native-navigation-redux-helpers';
@@ -117,9 +118,10 @@ export class Map extends Component {
         key={s.id}
         title={s.pokemon.name}
         description={s.pokemon.name}
-        image={{ uri: s.pokemon.marker_url }}
         style={{ width: 40 }}
-      />
+      >
+        <PokemonMapMarker pokemonId={parseInt(s.pokemon.pokenumber, 10)} />
+      </MapView.Marker>
     ));
     return (
       <View style={{ flex: 1 }}>
