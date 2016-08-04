@@ -6,8 +6,7 @@
 
 import {
   GET_POKEMONS_IN_AREA_REQUEST,
-  // GET_POKEMONS_IN_AREA_SUCCESS,
-  // GET_POKEMONS_IN_AREA_ERROR,
+  MAP_MOUNTED_AND_RENDERED,
 } from './constants';
 
 export function getPokemonsInArea(area) {
@@ -16,5 +15,11 @@ export function getPokemonsInArea(area) {
     payload: {
       area,
     },
+  };
+}
+
+export function reportMapReady() {
+  return {
+    type: MAP_MOUNTED_AND_RENDERED,
   };
 }

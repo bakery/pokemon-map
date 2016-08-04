@@ -29,7 +29,7 @@ function* runAddSighting(action) {
     const response = yield call(runMutation, {
       latitude: action.payload.location.latitude,
       longitude: action.payload.location.longitude,
-      pokemonId: action.payload.pokemon.pokenumber,
+      pokemonId: action.payload.pokemon.number,
     });
     yield put({
       type: ADD_SIGHTING_SUCCESS,

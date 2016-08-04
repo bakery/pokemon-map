@@ -38,7 +38,7 @@ class PokemonList extends Component {
 
   render() {
     const { onSelected } = this.props;
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1.number !== r2.number });
     const dataSource = ds.cloneWithRows(
       this.filterPokemon(this.state && this.state.filterText)
     );

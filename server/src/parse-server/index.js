@@ -33,7 +33,7 @@ export default {
         }],
         iconsFolder,
         users: settings.parseServerDashboardUsers,
-      })
+      }, true)
     );
 
     runPokemonFixture();
