@@ -132,27 +132,20 @@ Sighting.Mutations = {
         type: new GraphQLNonNull(GraphQLInt),
       },
     },
-    resolve: (_, { latitude, longitude, pokemon_id }) => {
+    resolve: (_, { latitude, longitude, pokemon_id }, { user }) => {
       const sighting = new Sighting({
-        latitude, longitude, pokemon_id,
+        latitude, longitude, pokemon_id, user,
       });
+
+      const sightingACL = new Parse.ACL();
+      sightingACL.setPublicReadAccess(true);
+      sightingACL.setPublicWriteAccess(false);
+
+      sighting.setACL(sightingACL);
+
       return sighting.save().then(s => s);
     },
   },
-  // deleteSighting: {
-  //   type: Sighting.SchemaType,
-  //   description: 'Delete an instance of Sighting',
-  //   args: {
-  //     id: { type: new GraphQLNonNull(GraphQLID) },
-  //   },
-  //   resolve: (_, { id }, { Query }) =>
-  //     new Query(Sighting).get(id).then((sighting) => {
-  //       if (sighting) {
-  //         return sighting.destroy();
-  //       }
-  //       return sighting;
-  //     }),
-  // },
 };
 
 export default Sighting;
