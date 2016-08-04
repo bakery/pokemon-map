@@ -4,21 +4,16 @@
  *
  */
 
-import ReactNative from 'react-native';
 import React, { Component } from 'react';
-import styles from './styles';
-
-const { View, Text, TouchableOpacity } = ReactNative;
+import Icon from 'react-native-vector-icons/Ionicons';
+import ActionButton from 'react-native-action-button';
 
 class AddSightingButton extends Component {
   render() {
     const { onNavigate } = this.props;
+    const icon = <Icon name="md-eye" size={30} color="#fff" style={{ marginTop: 3 }} />;
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={onNavigate}>
-          <Text style={{ padding: 20, fontSize: 20 }}>+</Text>
-        </TouchableOpacity>
-      </View>
+      <ActionButton buttonColor="#ff1c1c" icon={icon} onPress={onNavigate} />
     );
   }
 }

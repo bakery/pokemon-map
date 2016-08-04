@@ -6,14 +6,15 @@
 
 import ReactNative from 'react-native';
 import React, { Component } from 'react';
-import styles from './styles';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { selectAddSighting } from './reducer';
 import SightingForm from '../SightingForm';
-import { addSighting } from './actions';
+import { addSighting as addSightingAction } from './actions';
+import Icon from 'react-native-vector-icons/Ionicons';
+import ActionButton from 'react-native-action-button';
 
-const { View, Text, TouchableOpacity } = ReactNative;
+const { View } = ReactNative;
 
 export class AddSighting extends Component {
   constructor(props) {
@@ -38,31 +39,22 @@ export class AddSighting extends Component {
     const { dispatch, onDismiss } = this.props;
     const { selectedLocation, selectedPokemon } = this.form.getFormData();
     console.log('form data', this.form.getFormData());
-    dispatch(addSighting(selectedLocation, selectedPokemon));
+    dispatch(addSightingAction(selectedLocation, selectedPokemon));
     onDismiss();
   }
 
   render() {
-    const { onDismiss } = this.props;
     const canSubmit = this.state && this.state.canSubmit;
+    const icon = <Icon name="md-add" size={30} color="#fff" style={{ marginTop: 3 }} />;
 
     const submitButton = canSubmit ? (
-      <TouchableOpacity onPress={this.onSubmit}>
-        <Text style={{ backgroundColor: 'yellow', padding: 10 }}>Submit</Text>
-      </TouchableOpacity>
+      <ActionButton buttonColor="#ff1c1c" icon={icon} onPress={this.onSubmit} />
     ) : null;
 
     return (
-      <View style={styles.container}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          {submitButton}
-          <TouchableOpacity onPress={onDismiss}>
-            <Text style={{ backgroundColor: 'yellow', padding: 10 }}>x</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flex: 1 }}>
-          <SightingForm ref={this.grabFormRef} onReady={this.onFormReady} />
-        </View>
+      <View style={{ flex: 1, paddingTop: 63 }}>
+        <SightingForm ref={this.grabFormRef} onReady={this.onFormReady} />
+        {submitButton}
       </View>
     );
   }

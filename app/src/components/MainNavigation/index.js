@@ -17,7 +17,7 @@ import Map from '../Map';
 import AddSighting from '../AddSighting';
 
 const { View, Text, NavigationExperimental } = ReactNative;
-const { CardStack: NavigationCardStack } = NavigationExperimental;
+const { CardStack: NavigationCardStack, Header: NavigationHeader } = NavigationExperimental;
 const { popRoute } = navigationActions;
 
 export class MainNavigation extends Component {
@@ -70,7 +70,21 @@ export class MainNavigation extends Component {
     );
   }
 
-  renderOverlay() {
+  renderOverlay(props) {
+    const { dispatch, mainNavigation } = this.props;
+    if (props.scene.route.key === 'addSighting') {
+      const title = (
+        <NavigationHeader.Title>Report Pokemon</NavigationHeader.Title>
+      );
+      return (
+        <NavigationHeader
+          {...props}
+          onNavigateBack={() => dispatch(popRoute(mainNavigation.key))}
+          renderTitleComponent={() => title}
+        />
+      );
+    }
+
     return null;
   }
 

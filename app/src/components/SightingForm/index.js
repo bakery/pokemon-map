@@ -84,7 +84,6 @@ class SightingForm extends Component {
     const currentPosition = this.state && this.state.currentPosition;
     const selectedPokemon = this.state && this.state.selectedPokemon;
 
-    // position: 'absolute', left: 0, bottom: 0, height: mapHeight, width
     const mapComponent = currentPosition ? (
       <MapView
         initialRegion={currentPosition}
@@ -108,7 +107,7 @@ class SightingForm extends Component {
 
     return (
       <View style={styles.container}>
-        <PokemonSelector onSelected={this.onPokemonSelected} style={{ marginBottom: mapHeight, marginTop: 100 }} />
+        <PokemonSelector onSelected={this.onPokemonSelected} />
         {submitSightingButton}
         {mapComponent}
       </View>
