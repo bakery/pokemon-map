@@ -17,7 +17,7 @@ import Loader from '../Loader';
 import AddSightingButton from '../AddSightingButton';
 import PokemonMapMarker from '../PokemonMapMarker';
 
-import { getPokemonsInArea } from './actions';
+import { getPokemonsInArea, reportMapReady } from './actions';
 import { actions as navigationActions } from 'react-native-navigation-redux-helpers';
 
 const { popRoute, pushRoute } = navigationActions;
@@ -42,6 +42,7 @@ export class Map extends Component {
   }
 
   componentDidMount() {
+    const { dispatch } = this.props;
     const reportCurrentLocation = (latitude, longitude) => {
       this.map.animateToRegion({
         latitude,
@@ -71,11 +72,8 @@ export class Map extends Component {
         maximumAge: 1000,
       }
     );
-    // XX: watch position
-    // this.watchID = navigator.geolocation.watchPosition((position) => {
-    //   var lastPosition = JSON.stringify(position);
-    //   this.setState({lastPosition});
-    // });
+
+    dispatch(reportMapReady());
   }
 
   onRegionChangeComplete(region) {
