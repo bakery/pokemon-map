@@ -1,12 +1,10 @@
 ![Pkmnmps logo](.github/logo.png)
 
 ***
+🎈🎈🎈 Got testflight? Helps us test Pokemon Map - send an email to hi@thebakery.io and we'll add you to testers
+***
 
 # Maps for Pokemon Go
-
-
-🎈🎈🎈 Got testflight? Helps us test Pokemon Map - send an email to hi@thebakery.io and we'll add you to testers
-
 
 ![PokemonMap](https://dl.dropboxusercontent.com/u/9224326/pkmnmaps.png)
 
