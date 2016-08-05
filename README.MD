@@ -1,4 +1,4 @@
-![Pkmnmps logo](.github/logo.jpg)
+![Pkmnmps logo](.github/logo.png)
 
 ***
 
