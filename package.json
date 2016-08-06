@@ -8,7 +8,7 @@
     "ci": "npm run test:baker && npm run test:setup && npm run test:app && npm run test:server && npm run test:server-setup",
     "codepush": "cd app && code-push release-react pkmnmps ios",
     "codepush-promote": "cd app && code-push promote pkmnmps Staging Production",
-    "deploy:server": "./node_modules/.bin/baker push_to_heroku --settings ./settings/production/base server",
+    "deploy:server": "./node_modules/.bin/baker push_to_heroku --settings ./settings/production/base,./settings/production/server server",
     "generate": "./node_modules/.bin/baker run ./baker/generate.js",
     "ios": "cd app && react-native run-ios",
     "lint": "./node_modules/.bin/baker lint app baker server",
