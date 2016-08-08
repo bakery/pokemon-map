@@ -1,6 +1,12 @@
 language: node_js
 node_js:
   - "5"
-  - "stable"
 sudo: false
-script: "npm install -g react-native-cli && npm run ci"
+before_install:
+  - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
+  - grep "\[codepush\]" <<< "$TRAVIS_COMMIT_MSG" && export DELIVER_WITH_CODEPUSH=1
+  - grep "\[testflight\]" <<< "$TRAVIS_COMMIT_MSG" && export DELIVER_WITH_TESTFLIGHT=1
+script: "echo \"Doing some inmportant stuff\""
+after_script:
+  - if [ -n "$DELIVER_WITH_CODEPUSH" ]; then echo "Delivering with code push"; fi
+  - if [ -n "$DELIVER_WITH_TESTFLIGHT" ]; then echo "Delivering with test flight"; fi
