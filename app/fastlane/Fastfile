@@ -28,7 +28,7 @@ platform :ios do
   desc "Submit a new Beta Build to Apple TestFlight"
   desc "This will also make sure the profile is up to date"
   lane :beta do
-    match(type: "development") # more information: https://codesigning.guide
+    match(type: "development", readonly: true) # more information: https://codesigning.guide
     gym(
       scheme: "PokemonMap",
       project: "./ios/PokemonMap.xcodeproj"
