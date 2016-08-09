@@ -785,7 +785,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = PokemonMap;
-				PROVISIONING_PROFILE = "$(sigh_tools.io.thebakery.pkmnmaps)";
+				PROVISIONING_PROFILE = "$(sigh_io.thebakery.pkmnmaps_appstore)";
 			};
 			name = Debug;
 		};
@@ -812,7 +812,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = PokemonMap;
-				PROVISIONING_PROFILE = "$(sigh_tools.io.thebakery.pkmnmaps)";
+				PROVISIONING_PROFILE = "$(sigh_io.thebakery.pkmnmaps_appstore)";
 			};
 			name = Release;
 		};

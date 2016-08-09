@@ -28,12 +28,13 @@ platform :ios do
   desc "Submit a new Beta Build to Apple TestFlight"
   desc "This will also make sure the profile is up to date"
   lane :beta do
-    match(type: "development", readonly: true) # more information: https://codesigning.guide
-    gym(
+    match(type: "appstore", readonly: true) # more information: https://codesigning.guide
+    ipa = gym(
       scheme: "PokemonMap",
       project: "./ios/PokemonMap.xcodeproj"
     ) # Build your app - more options available
-    pilot
+    pilot(ipa: ipa)
+    
 
     # sh "your_script.sh"
     # You can also use other beta testing services here (run `fastlane actions`)
