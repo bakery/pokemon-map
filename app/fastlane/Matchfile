@@ -1,5 +1,5 @@
 # XX: this is super secret and it must be private
-git_url "https://github.com/callmephilip/pokemon-maps-deployment-certs.git"
+git_url "git+ssh://git@github.com/callmephilip/pokemon-maps-deployment-certs.git"
 
 type "development"
 shallow_clone "false"
