@@ -1,0 +1,5 @@
+{
+  "parseServerApplicationId": "pkmngmps", 
+  "parseServerURL": "https://pkmngmps.herokuapp.com/parse",
+  "graphqlURL": "https://pkmngmps.herokuapp.com/graphql"
+}
