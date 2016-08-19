@@ -72,6 +72,8 @@ Sighting.RootQuery = {
     },
   },
   resolve: (_, args) => {
+    console.log('looking for sightings', args);
+
     const defaultArgs = {
       live: false,
       minimal: true,
