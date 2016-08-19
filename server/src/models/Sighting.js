@@ -85,8 +85,13 @@ Sighting.RootQuery = {
       json: true,
     }, (error, response, body) => {
       if (!error && response.statusCode === 200) {
-        console.log('resolving with', body.seens);
-        pokecrewData.resolve(body.seens);
+        const data = (body && body.seens) || [];
+        console.log('resolving with', data);
+        pokecrewData.resolve(data.map(
+          s => Object.assign(s, {
+            pokemon_id: parseInt(s.pokemon_id, 10),
+          })
+        ));
       } else {
         pokecrewData.reject(error);
       }
