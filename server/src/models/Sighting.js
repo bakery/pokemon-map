@@ -86,6 +86,7 @@ Sighting.RootQuery = {
       qs: Object.assign({}, defaultArgs, args),
       json: true,
     }, (error, response, body) => {
+      console.log('got sightings with', response, response.statusCode, body);
       if (!error && response.statusCode === 200) {
         const data = (body && body.seens) || [];
         console.log('resolving with', data);
