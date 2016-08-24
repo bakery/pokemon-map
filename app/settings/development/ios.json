@@ -1,2 +1,5 @@
 {
+  "parseServerApplicationId": "parse-app-id",
+  "parseServerURL": "http://localhost:8000/parse",
+  "graphqlURL": "http://localhost:8000/graphql"
 }

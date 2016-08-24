@@ -72,23 +72,12 @@ Sighting.RootQuery = {
     },
   },
   resolve: (_, args) => {
+    console.log('looking for sightings', args);
+
     const defaultArgs = {
       live: false,
       minimal: true,
     };
-
-    // pokemon_id=
-
-    // center_latitude=38.71713783905443
-    // center_longitude=-9.13937951534421
-    // northeast_latitude=38.81324035802483
-    // northeast_longitude=-9.037240996057108
-    // southwest_latitude=38.62090592679008
-    // southwest_longitude=-9.241518034631326
-
-
-    // const query = new Query(Sighting);
-    // return query.find();
 
     const pokecrewData = new Parse.Promise();
 
@@ -97,22 +86,32 @@ Sighting.RootQuery = {
       qs: Object.assign({}, defaultArgs, args),
       json: true,
     }, (error, response, body) => {
+      console.log('got sightings with', response, response.statusCode, body);
       if (!error && response.statusCode === 200) {
-        console.log('resolving with', body.seens);
-        pokecrewData.resolve(body.seens);
+        const data = (body && body.seens) || [];
+        console.log('resolving with', data);
+        pokecrewData.resolve(data.map(
+          s => Object.assign(s, {
+            pokemon_id: parseInt(s.pokemon_id, 10),
+          })
+        ));
       } else {
         pokecrewData.reject(error);
       }
     });
 
+    const southWest = new Parse.GeoPoint(args.southwest_latitude, args.southwest_longitude);
+    const northEast = new Parse.GeoPoint(args.northeast_latitude, args.northeast_longitude);
     const sightingQuery = new Parse.Query(Sighting);
-    sightingQuery.lessThanOrEqualTo('latitude', args.northeast_latitude);
-    sightingQuery.greaterThan('latitude', args.southwest_latitude);
-    sightingQuery.lessThanOrEqualTo('longitude', args.northeast_longitude);
-    sightingQuery.greaterThan('longitude', args.southwest_longitude);
+
+    sightingQuery.withinGeoBox('location', southWest, northEast);
 
     return Parse.Promise.when(pokecrewData, sightingQuery.find()).then((pcData, internalData) =>
-      [...pcData, ...internalData.map(d => Object.assign({}, d.toJSON(), { id: d.id }))]
+      [...pcData, ...internalData.map(d => Object.assign({}, d.toJSON(), {
+        id: d.id,
+        latitude: d.get('location').latitude,
+        longitude: d.get('location').longitude,
+      }))]
     );
   },
 };
@@ -133,8 +132,10 @@ Sighting.Mutations = {
       },
     },
     resolve: (_, { latitude, longitude, pokemon_id }, { user }) => {
+      const location = new Parse.GeoPoint({ latitude, longitude });
+
       const sighting = new Sighting({
-        latitude, longitude, pokemon_id, user,
+        location, pokemon_id, user,
       });
 
       const sightingACL = new Parse.ACL();

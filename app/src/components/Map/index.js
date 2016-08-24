@@ -20,8 +20,8 @@ import PokemonMapMarker from '../PokemonMapMarker';
 import { getPokemonsInArea, reportMapReady } from './actions';
 import { actions as navigationActions } from 'react-native-navigation-redux-helpers';
 
-const { popRoute, pushRoute } = navigationActions;
-const { Dimensions, View } = ReactNative;
+const { pushRoute } = navigationActions;
+const { Dimensions, View, ActivityIndicator } = ReactNative;
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
@@ -44,11 +44,13 @@ export class Map extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     const reportCurrentLocation = (latitude, longitude) => {
-      this.map.animateToRegion({
-        latitude,
-        longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
+      this.setState({
+        currentLocation: {
+          latitude,
+          longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
       });
     };
 
@@ -81,15 +83,6 @@ export class Map extends Component {
 
     this.region = region;
 
-    console.log('onRegionChangeComplete',
-      `center_latitude: ${region.latitude}`,
-      `center_longitude: ${region.longitude}`,
-      `northeast_latitude: ${region.latitude + region.latitudeDelta / 2}`,
-      `northeast_longitude: ${region.longitude + region.longitudeDelta / 2}`,
-      `southwest_latitude: ${region.latitude - region.latitudeDelta / 2}`,
-      `southwest_longitude: ${region.longitude - region.latitudeDelta / 2}`
-    );
-
     dispatch(getPokemonsInArea({
       center_latitude: region.latitude,
       center_longitude: region.longitude,
@@ -106,7 +99,17 @@ export class Map extends Component {
 
   render() {
     const { map, dispatch } = this.props;
-    console.log('sightings', map.get('sightings'));
+
+    if (!this.state || !this.state.currentLocation) {
+      return (
+        <ActivityIndicator
+          animating
+          style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
+          size="large"
+        />
+      );
+    }
+
     const markers = map.get('sightings').map((s) => (
       <MapView.Marker
         coordinate={{
@@ -124,7 +127,7 @@ export class Map extends Component {
     return (
       <View style={{ flex: 1 }}>
         <MapView
-          initialRegion={this.region}
+          initialRegion={this.state.currentLocation}
           ref={this.grabMapRef}
           style={styles.mapStyle}
           onRegionChangeComplete={this.onRegionChangeComplete}

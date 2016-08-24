@@ -32,7 +32,7 @@ function map(state = fromJS(initialState), action) {
       return state.set('loading', true);
     case GET_POKEMONS_IN_AREA_SUCCESS:
       return state.withMutations(s => {
-        s.updateIn(['sightings'], sightings => mergeSightings(sightings, action.payload.sighting));
+        s.updateIn(['sightings'], sightings => mergeSightings(sightings, action.payload.sightings));
         s.set('loading', false);
       });
     default:

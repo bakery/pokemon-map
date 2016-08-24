@@ -1,36 +1,48 @@
 import { takeEvery } from 'redux-saga';
 import { put, call } from 'redux-saga/effects';
-import GraphQLClient from 'parse-graphql-client';
-import Settings from '../settings';
 import {
   GET_POKEMONS_IN_AREA_REQUEST,
   GET_POKEMONS_IN_AREA_SUCCESS,
   GET_POKEMONS_IN_AREA_ERROR,
 } from '../components/Map/constants';
 
-const settings = Settings.load();
-// eslint-disable-next-line global-require
-const client = new GraphQLClient(settings.graphqlURL, require('parse/react-native'));
+import { getPokemonNameById } from '../data/pokemon';
+
+// eslint-disable-next-line camelcase, max-len
+function getPokemonThruPokeCrew({ center_latitude, center_longitude, northeast_latitude, northeast_longitude, southwest_latitude, southwest_longitude }) {
+  // eslint-disable-next-line camelcase
+  const url = `https://api.pokecrew.com/api/v1/seens?live=false&minimal=true&center_latitude=${center_latitude}&center_longitude=${center_longitude}&northeast_latitude=${northeast_latitude}&northeast_longitude=${northeast_longitude}&southwest_latitude=${southwest_latitude}&southwest_longitude=${southwest_longitude}`;
+
+  return fetch(url).then(response => {
+    const status = response.status;
+    const contentType = response.headers.get('content-type');
+    if (contentType && status === 200 && contentType.match(/application\/json/ig)) {
+      return response.json();
+    }
+
+    return [];
+  }).then(data => {
+    if (data && data.seens) {
+      return data.seens.map(s => {
+        const pokemonId = parseInt(s.pokemon_id, 10);
+        return {
+          id: s.id,
+          latitude: parseFloat(s.latitude),
+          longitude: parseFloat(s.longitude),
+          pokemon: {
+            pokenumber: parseInt(s.pokemon_id, 10),
+            name: getPokemonNameById(pokemonId),
+          },
+        };
+      });
+    }
+
+    return [];
+  });
+}
 
 function runQuery(area) {
-  console.log('running query in area', area, settings.graphqlURL);
-  // XX: replace example query with your target model
-  return client.query(`
-    {
-      sighting(
-        center_latitude: ${area.center_latitude},
-        center_longitude: ${area.center_longitude},
-        northeast_latitude: ${area.northeast_latitude},
-        northeast_longitude: ${area.northeast_longitude},
-        southwest_latitude: ${area.southwest_latitude},
-        southwest_longitude: ${area.southwest_longitude}
-      ) {
-        id, latitude, longitude, pokemon {
-          name, marker_url, pokenumber
-        }
-      }
-    }
-  `);
+  return getPokemonThruPokeCrew(area);
 }
 
 function* runFindPokemonsInArea(action) {
@@ -38,10 +50,11 @@ function* runFindPokemonsInArea(action) {
     const response = yield call(runQuery, action.payload.area);
     yield put({
       type: GET_POKEMONS_IN_AREA_SUCCESS,
-      payload: response,
+      payload: {
+        sightings: response,
+      },
     });
   } catch (error) {
-    console.error(error);
     yield put({
       type: GET_POKEMONS_IN_AREA_ERROR,
       payload: {
